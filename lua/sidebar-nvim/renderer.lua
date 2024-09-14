@@ -94,7 +94,7 @@ local function build_section_title_separator(section, index)
 end
 
 local function get_lines_and_hl(sections_data)
-    local lines = {}
+    local lines = { " " }
     local hl = {}
     local section_line_indexes = {}
 

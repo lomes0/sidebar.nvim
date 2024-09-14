@@ -180,7 +180,7 @@ function M.find_section_at_cursor(opts)
     opts = opts or { content_only = true }
 
     local cursor = opts.cursor or api.nvim_win_get_cursor(0)
-    local cursor_line = cursor[1]
+    local cursor_line = cursor[1] + 1
     local cursor_col = cursor[2]
 
     for section_index, section_line_index in ipairs(M.State.section_line_indexes) do
