@@ -165,12 +165,12 @@ return {
                     vim.api.nvim_buf_call(buffer, function()
                         vim.cmd("silent! w")
                     end)
-                    vim.api.nvim_buf_delete(buffer, { force = true })
+                    _G.buffer_remove(buffer)
                 elseif action == "d" then
-                    vim.api.nvim_buf_delete(buffer, { force = true })
+                    _G.buffer_remove(buffer)
                 end
             else
-                vim.api.nvim_buf_delete(buffer, { force = true })
+                _G.buffer_remove(buffer)
             end
         end,
         ["e"] = function(line)
