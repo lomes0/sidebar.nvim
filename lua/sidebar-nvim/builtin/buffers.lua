@@ -30,16 +30,36 @@ local function get_fileicon(filename)
     end
 end
 
+local function abbreviate_path(path, cwd)
+    local parts = {}
+
+    if string.sub(path, 1, string.len(cwd)) == cwd then
+      path = string.sub(path, string.len(cwd)+1)
+    end
+
+    for part in string.gmatch(path, "([^/]+)") do
+        table.insert(parts, part)
+    end
+
+    for i = 1, #parts - 1 do
+        parts[i] = string.sub(parts[i], 1, 1)
+    end
+
+    return './' .. table.concat(parts, "/")
+end
+
 local function get_buffers(ctx)
     local lines = {}
     local hl = {}
     local current_buffer = vim.api.nvim_get_current_buf()
     loclist_items = {}
+    local vim_cwd = vim.fn.getcwd()
 
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
         if buffer ~= view.View.bufnr then
             local ignored = false
             local bufname = vim.api.nvim_buf_get_name(buffer)
+            local bufabbr = abbreviate_path(bufname, vim_cwd)
 
             for _, ignored_buffer in ipairs(config.buffers.ignored_buffers or {}) do
                 if string.match(bufname, ignored_buffer) then
@@ -93,7 +113,7 @@ local function get_buffers(ctx)
                     left = {
                         get_fileicon(bufname),
                         numbers_text,
-                        { text = utils.filename(bufname) .. modified, hl = name_hl },
+                        { text = bufabbr .. modified, hl = name_hl },
                     },
                     data = { buffer = buffer, filepath = bufname },
                     order = order,
